@@ -2,6 +2,9 @@
 // Created by Naum Puroski on 17/10/2016.
 //
 
+#ifndef FRIENDLYWITHC_CONCRETERESOURCEFACTORY_H
+#define FRIENDLYWITHC_CONCRETERESOURCEFACTORY_H
+
 #include <factory/ResourceFactory.h>
 
 struct ConcreteResourceFactory {
@@ -17,4 +20,4 @@ struct ConcreteResourceFactory {
     }
 };
 
-static const ConcreteResourceFactory _concreteResourceFactory;
+#endif // FRIENDLYWITHC_CONCRETERESOURCEFACTORY_H

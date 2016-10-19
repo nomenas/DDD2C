@@ -7,18 +7,22 @@
 
 #include <core/Property.h>
 
-#include <domain/Device.h>
+#include "Device.h"
 
 class Connection : public Object {
+public:
     enum PropertyID {
         DeviceProperty,
-        PortProperty
+        ChannelProperty
     };
 
     Connection(Device* device) : Object(device) {}
 
-    Property<Device*, DeviceProperty, Permission::ReadOnly> device{this, nullptr};
-    Property<unsigned short, PortProperty, Permission::ReadOnly> port{this , 0};
+    virtual void postRequest(int request, std::function<void(int)> response) = 0;
+
+    // if we don't want notifications
+    virtual Device* device() const = 0;
+    virtual unsigned short channel() const = 0;
 };
 
 #endif //FRIENDLYWITHC_CONNECTION_H

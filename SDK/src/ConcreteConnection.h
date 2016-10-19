@@ -8,13 +8,19 @@
 #include <domain/Connection.h>
 
 class Device;
+class ConcreteDevice;
 
 class ConcreteConnection : public Connection {
 public:
-    ConcreteConnection(Device* device);
+    ConcreteConnection(Device* device, unsigned short channel);
 
+    void postRequest(int request, std::function<void(int)> response) override;
 
+    Device* device() const override;
+    unsigned short channel() const override;
+
+private:
+    unsigned _channel = 0;
 };
-
 
 #endif //FRIENDLYWITHC_CONCRETECONNECTION_H

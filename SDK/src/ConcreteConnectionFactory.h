@@ -1,14 +1,14 @@
-//
-// Created by Naum Puroski on 17/10/2016.
-//
+#ifndef FRIENDLYWITHC_CONCRETECONNECTIONFACTORY_H
+#define FRIENDLYWITHC_CONCRETECONNECTIONFACTORY_H
 
 #include "ConcreteConnection.h"
+#include "ConcreteDevice.h"
 #include <factory/ConnectionFactory.h>
 
 struct ConcreteConnectionFactory {
     ConcreteConnectionFactory() {
         ConnectionFactory ::SetFactory([](const ConnectionConfig& config) -> Connection* {
-            return nullptr;
+            return dynamic_cast<ConcreteDevice*>(config.device) ? new ConcreteConnection(config.device, config.channel) : nullptr;
         });
     }
     ~ConcreteConnectionFactory() {
@@ -16,4 +16,4 @@ struct ConcreteConnectionFactory {
     }
 };
 
-//static const ConcreteConnectionFactory _concreteConnectionFactory;
+#endif // FRIENDLYWITHC_CONCRETECONNECTIONFACTORY_H

@@ -2,6 +2,10 @@
 // Created by Naum Puroski on 16/10/2016.
 //
 
+#ifndef FRIENDLYWITHC_CONCRETEDEVICEFACTORY_H
+#define FRIENDLYWITHC_CONCRETEDEVICEFACTORY_H
+
+
 #include "ConcreteDevice.h"
 #include <factory/DeviceFactory.h>
 
@@ -17,4 +21,4 @@ struct ConcreteDeviceFactory {
     }
 };
 
-static const ConcreteDeviceFactory _concreteDeviceFactory;
+#endif // FRIENDLYWITHC_CONCRETEDEVICEFACTORY_H

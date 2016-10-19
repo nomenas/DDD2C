@@ -12,18 +12,23 @@ class Factory {
     using Type = std::function<PRODUCT(const CONFIG&)>;
 
 public:
+    using Observer = std::function<void(const PRODUCT&)>;
+
     static PRODUCT Create(const CONFIG& config, Object::Observer observer = Object::Observer()) {
-        PRODUCT returnValue{instance().FactoryMethod(config)};
+        PRODUCT returnValue{instance()._factoryMethod(config)};
 
         if (returnValue && observer) {
             returnValue->addObserver(observer);
-            observer(Object::Created, -1, nullptr);
         }
         return returnValue;
     }
 
     static void SetFactory(Type factoryMethod) {
-        instance().FactoryMethod = factoryMethod;
+        instance()._factoryMethod = factoryMethod;
+    }
+
+    static void SetObserver(Observer observer) {
+        instance()._observer = observer;
     }
 
 private:
@@ -32,7 +37,8 @@ private:
         return _instance;
     }
 
-    Type FactoryMethod;
+    Type _factoryMethod;
+    Observer _observer;
 };
 
 #endif //FRIENDLYWITHC_FACTORY_H

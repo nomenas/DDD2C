@@ -21,9 +21,9 @@ public:
 
     Property<TYPE, ID>& operator=(const TYPE& value) {
         if (m_value != value && m_object->onPropertyAboutToChange(ID, &value)) {
-            m_object->notify(Object::PropertyAboutToChange, ID, &value);
+            m_object->notify(m_object, Object::PropertyAboutToChange, ID, &value);
             m_value = value;
-            m_object->notify(Object::PropertyChanged, ID, nullptr);
+            m_object->notify(m_object, Object::PropertyChanged, ID, nullptr);
         }
         return *this;
     }
@@ -61,7 +61,7 @@ private:
     Property<TYPE, ID, Permission::ReadOnly>& operator=(const TYPE& value) {
         if (m_value != value) {
             m_value = value;
-            m_object->notify(Object::PropertyChanged, ID, nullptr);
+            m_object->notify(m_object, Object::PropertyChanged, ID, nullptr);
         }
         return *this;
     }

@@ -11,10 +11,10 @@
 
 class Object {
 public:
-    using Observer = std::function<void(int event, int property, const void* data)>;
+    using Observer = std::function<void(Object* object, int event, int property, const void* data)>;
 
     enum Event {
-        Created,
+        AboutToDestory,
         Destroyed,
         PropertyAboutToChange,
         PropertyChanged,
@@ -26,18 +26,32 @@ public:
         CollectionCleared,
         CollectionAboutToUpdate,
         CollectionUpdated,
+        ParentAboutToChange,
+        ParentChanged,
+        ChildAboutToAdd,
+        ChildAdded,
+        ChildAboutToRemove,
+        ChildRemoved,
         Domain = 1000
     };
 
-    Object(Object* parent = nullptr) {
-        if ((m_parent = parent)) {
-            parent->m_children.push_back(this);
+    Object(Object* parent = nullptr)
+        : m_parent(parent) {
+        if (m_parent) {
+            m_parent->addChild(this);
         }
     }
 
     virtual ~Object() {
+        notify(this, Event::AboutToDestory);
+
         std::for_each(m_children.begin(), m_children.end(), std::default_delete<Object>());
-        notify(Event::Destroyed);
+
+        if (m_parent) {
+            m_parent->removeChild(this);
+        }
+
+        notify(this, Event::Destroyed);
     }
 
     int addObserver(Observer observer) {
@@ -57,9 +71,9 @@ public:
         return true;
     }
 
-    void notify(int event, int property = -1, const void* data = nullptr) {
+    void notify(Object* object, int event, int property = -1, const void* data = nullptr) {
         for (auto iter : m_observers) {
-            iter.second(event, property, data);
+            iter.second(object, event, property, data);
         }
     }
 
@@ -69,7 +83,37 @@ protected:
         property.set(value);
     }
 
-private:
+    virtual bool onChildAboutToRemove(Object* object) {return true;}
+    virtual bool onChildRemoved(Object* object) {return true;}
+    virtual bool onChildAboutToAdd(Object* object) {return true;}
+    virtual void onChildAdded(Object* object) {};
+
+    void addChild(Object* object) {
+        auto iter = std::find(m_children.begin(), m_children.end(), object);
+        if (iter == m_children.end()) {
+            if (onChildAboutToAdd(object)) {
+                notify(this, ChildAboutToAdd, -1, object);
+                m_children.push_back(object);
+                notify(this, ChildAdded, -1, object);
+                object->m_parent = this;
+                onChildAdded(object);
+            }
+        }
+    }
+
+    void removeChild(Object* object) {
+        auto iter = std::find(m_children.begin(), m_children.end(), object);
+        if (iter != m_children.end()) {
+            if (onChildAboutToRemove(object)) {
+                notify(this, ChildAboutToRemove, -1, object);
+                m_children.erase(iter);
+                notify(this, ChildRemoved, -1, object);
+                object->m_parent = nullptr;
+                onChildRemoved(object);
+            }
+        }
+    }
+
     Object* m_parent;
     std::vector<Object*> m_children;
     unsigned int m_maxObserverID = 0;

@@ -10,6 +10,7 @@
 
 struct ConnectionConfig {
     Device* device;
+    unsigned short channel;
 };
 
 using ConnectionFactory = Factory<Connection*, ConnectionConfig>;

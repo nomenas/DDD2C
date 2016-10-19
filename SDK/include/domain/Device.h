@@ -11,8 +11,8 @@
 #include <core/Property.h>
 #include <core/Collection.h>
 
-class Connection;
 class Resource;
+class Connection;
 
 class Device : public Object {
 public:
@@ -24,15 +24,19 @@ public:
     enum PropertyID {
         NameProperty,
         ReadOnlyFieldProperty,
-        ResourcesCollection,
+        CollectionProperty,
     };
 
     virtual bool connect() = 0;
     virtual bool disconnect() = 0;
 
+    virtual std::vector<Resource*> resources() = 0;
+    virtual std::vector<Connection*> connections() = 0;
+
     Property<std::string, NameProperty> name{this, ""};
     Property<std::string, ReadOnlyFieldProperty, Permission::ReadOnly> readOnlyProperty{this, ""};
-    Collection<Resource*, ResourcesCollection, Permission::ReadOnly> resources{this};
+    Collection<int, CollectionProperty, Permission::ReadOnly> collection{this};
 };
+
 
 #endif //FRIENDLYWITHC_DEVICE_H

@@ -42,7 +42,7 @@ public:
         if (m_object->onCollectionAboutToChange(ID, Object::ItemAboutToAdd, &element)) {
             m_object->notify(ID, Object::ItemAboutToAdd, &element);
             m_data.push_back(element);
-            m_object->notify(ID, Object::ItemAdded, nullptr);
+            m_object->notify(m_object, ID, Object::ItemAdded, nullptr);
         }
     }
 
@@ -50,26 +50,26 @@ public:
         if (m_object->onCollectionAboutToChange(ID, Object::ItemAboutToRemove, &element)) {
             auto iter = std::find(m_data.begin(), m_data.end(), element);
             if (iter != m_data.end()) {
-                m_object->notify(ID, Object::ItemAboutToRemove, &element);
+                m_object->notify(m_object, ID, Object::ItemAboutToRemove, &element);
                 m_data.erase(iter);
-                m_object->notify(ID, Object::ItemRemoved, nullptr);
+                m_object->notify(m_object, ID, Object::ItemRemoved, nullptr);
             }
         }
     }
 
     void clear() {
         if (m_object->onCollectionAboutToChange(ID, Object::CollectionAboutToClear, nullptr)) {
-            m_object->notify(ID, Object::CollectionAboutToClear, nullptr);
+            m_object->notify(m_object, ID, Object::CollectionAboutToClear, nullptr);
             m_data.clear();
-            m_object->notify(ID, Object::CollectionCleared, nullptr);
+            m_object->notify(m_object, ID, Object::CollectionCleared, nullptr);
         }
     }
 
     void set(const std::vector<TYPE>& data) {
         if (m_object->onCollectionAboutToChange(ID, Object::CollectionAboutToUpdate, &data)) {
-            m_object->notify(ID, Object::CollectionAboutToUpdate, nullptr);
+            m_object->notify(m_object, ID, Object::CollectionAboutToUpdate, nullptr);
             m_data = data;
-            m_object->notify(ID, Object::CollectionUpdated, nullptr);
+            m_object->notify(m_object, ID, Object::CollectionUpdated, nullptr);
         }
     }
 
@@ -112,9 +112,9 @@ public:
 private:
     void add(const TYPE& element) {
         if (m_object->onCollectionAboutToChange(ID, Object::ItemAboutToAdd, &element)) {
-            m_object->notify(ID, Object::ItemAboutToAdd, &element);
+            m_object->notify(m_object, ID, Object::ItemAboutToAdd, &element);
             m_data.push_back(element);
-            m_object->notify(ID, Object::ItemAdded, nullptr);
+            m_object->notify(m_object, ID, Object::ItemAdded, nullptr);
         }
     }
 
@@ -122,26 +122,26 @@ private:
         if (m_object->onCollectionAboutToChange(ID, Object::ItemAboutToRemove, &element)) {
             auto iter = std::find(m_data.begin(), m_data.end(), element);
             if (iter != m_data.end()) {
-                m_object->notify(ID, Object::ItemAboutToRemove, &element);
+                m_object->notify(m_object, ID, Object::ItemAboutToRemove, &element);
                 m_data.erase(iter);
-                m_object->notify(ID, Object::ItemRemoved, nullptr);
+                m_object->notify(m_object, ID, Object::ItemRemoved, nullptr);
             }
         }
     }
 
     void clear() {
         if (m_object->onCollectionAboutToChange(ID, Object::CollectionAboutToClear, nullptr)) {
-            m_object->notify(ID, Object::CollectionAboutToClear, nullptr);
+            m_object->notify(m_object, ID, Object::CollectionAboutToClear, nullptr);
             m_data.clear();
-            m_object->notify(ID, Object::CollectionCleared, nullptr);
+            m_object->notify(m_object, ID, Object::CollectionCleared, nullptr);
         }
     }
 
     void set(const std::vector<TYPE>& data) {
         if (m_object->onCollectionAboutToChange(ID, Object::CollectionAboutToUpdate, &data)) {
-            m_object->notify(ID, Object::CollectionAboutToUpdate, nullptr);
+            m_object->notify(m_object, ID, Object::CollectionAboutToUpdate, nullptr);
             m_data = data;
-            m_object->notify(ID, Object::CollectionUpdated, nullptr);
+            m_object->notify(m_object, ID, Object::CollectionUpdated, nullptr);
         }
     }
 

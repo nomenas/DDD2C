@@ -13,11 +13,11 @@ ConcreteDevice::ConcreteDevice(const std::string& ip, unsigned short port)
 }
 
 bool ConcreteDevice::connect() {
-    notify(Connected);
+    notify(this, Connected);
     return true;
 }
 
 bool ConcreteDevice::disconnect() {
-    notify(Disconnected);
+    notify(this, Disconnected);
     return true;
 }
