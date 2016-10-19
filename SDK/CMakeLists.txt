@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 
 project(SDK)
 
-file(GLOB HEADER_FILES include/*.h)
+file(GLOB_RECURSE HEADER_FILES include/*.h)
 file(GLOB SOURCE_FILES src/*.cpp src/*.h)
 
 include_directories(include)
