@@ -11,11 +11,6 @@
 
 class Connection : public Object {
 public:
-    enum PropertyID {
-        DeviceProperty,
-        ChannelProperty
-    };
-
     Connection(Device* device) : Object(device) {}
 
     virtual void postRequest(int request, std::function<void(int)> response) = 0;

@@ -19,15 +19,15 @@ int main() {
     // Init SDK, in case we will use static linkage in future
     SDK initSDK;
 
-    // Test factory and properties
-    auto deviceDelegate = [](Object*, int event, int property, const void* data) {
-        std::cout << "Event received: " << event << ", property = " << property << ", data = " << (long) data << std::endl;
-    };
-
     // Observe factories
     DeviceFactory::SetObserver([](const std::unique_ptr<Device>& object) {
         std::cout << "Device object created! " << (long) object.get() << std::endl;
     });
+
+    // Test factory and properties
+    auto deviceDelegate = [](Object*, int event, int property, const void* data) {
+        std::cout << "Event received: " << event << ", property = " << property << ", data = " << (long) data << std::endl;
+    };
 
     // test creation of device object with valid configuration
     std::unique_ptr<Device> device{DeviceFactory::Create(DeviceConfig{"192.168.1.100", 50}, deviceDelegate)};

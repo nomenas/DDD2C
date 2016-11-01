@@ -93,10 +93,12 @@ protected:
         if (iter == m_children.end()) {
             if (onChildAboutToAdd(object)) {
                 notify(this, ChildAboutToAdd, -1, object);
+                notify(object, ParentAboutToChange, -1, this);
                 m_children.push_back(object);
-                notify(this, ChildAdded, -1, object);
                 object->m_parent = this;
+                notify(object, ParentChanged, -1, this);
                 onChildAdded(object);
+                notify(this, ChildAdded, -1, object);
             }
         }
     }
@@ -106,10 +108,12 @@ protected:
         if (iter != m_children.end()) {
             if (onChildAboutToRemove(object)) {
                 notify(this, ChildAboutToRemove, -1, object);
+                notify(object, ParentAboutToChange, -1, nullptr);
                 m_children.erase(iter);
-                notify(this, ChildRemoved, -1, object);
                 object->m_parent = nullptr;
+                notify(object, ParentChanged, -1, this);
                 onChildRemoved(object);
+                notify(this, ChildRemoved, -1, object);
             }
         }
     }
